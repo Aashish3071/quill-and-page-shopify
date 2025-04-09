@@ -1,0 +1,14 @@
+
+{% comment %}
+  Displays a price/sale badge on product cards
+  Usage:
+  {% render 'price-badge', product: product %}
+{% endcomment %}
+
+{% if product.compare_at_price > product.price %}
+  {% assign savings = product.compare_at_price | minus: product.price %}
+  {% assign percentage = savings | times: 100 | divided_by: product.compare_at_price %}
+  <span class="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 text-xs font-medium rounded-md">
+    Save {{ percentage }}%
+  </span>
+{% endif %}

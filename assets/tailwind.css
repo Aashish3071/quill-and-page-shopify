@@ -1,0 +1,58 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-cream text-charcoal font-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  .book-shadow {
+    box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .book-cover {
+    @apply relative overflow-hidden rounded-md book-shadow transition-all;
+  }
+  
+  .book-cover:hover {
+    @apply shadow-lg transform -translate-y-1;
+  }
+
+  .reading-container {
+    @apply max-w-prose mx-auto px-4 md:px-0;
+  }
+  
+  .section-heading {
+    @apply font-serif text-3xl md:text-4xl font-bold mb-6 relative;
+  }
+  
+  .section-heading::after {
+    content: '';
+    @apply block absolute bottom-0 left-0 w-16 h-1 bg-gold;
+  }
+
+  .nav-link {
+    @apply relative font-medium text-charcoal hover:text-gold transition-colors;
+  }
+  
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-gold transition-all duration-300;
+  }
+  
+  .nav-link:hover::after {
+    @apply w-full;
+  }
+}

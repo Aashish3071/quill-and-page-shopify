@@ -1,0 +1,85 @@
+
+<section class="py-20 bg-charcoal text-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="font-serif text-3xl md:text-4xl font-bold mb-4">
+        {{ section.settings.title }}
+      </h2>
+      <p class="text-gray-300 mb-8">
+        {{ section.settings.description }}
+      </p>
+      
+      {% form 'customer', class: 'flex flex-col md:flex-row gap-4 max-w-md mx-auto' %}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <input 
+          type="email" 
+          name="contact[email]" 
+          id="Email" 
+          class="bg-gray-700 border-gray-600 focus:border-gold text-white rounded-md px-4 py-2 w-full"
+          value="{% if customer %}{{ customer.email }}{% endif %}"
+          placeholder="{{ section.settings.placeholder }}"
+          aria-label="{{ section.settings.placeholder }}"
+          required
+        >
+        <button type="submit" class="bg-gold hover:bg-gold/90 text-charcoal px-6 py-2 font-medium rounded-md transition-colors whitespace-nowrap">
+          {{ section.settings.button_text }}
+        </button>
+      {% endform %}
+      
+      {% if section.settings.show_disclaimer %}
+        <p class="text-xs text-gray-400 mt-4">
+          {{ section.settings.disclaimer_text }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Join Our Literary Community"
+    },
+    {
+      "type": "text",
+      "id": "description",
+      "label": "Description",
+      "default": "Subscribe to our newsletter to receive updates on new releases, author interviews, and exclusive reading guides."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email Placeholder",
+      "default": "Your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Subscribe"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_disclaimer",
+      "label": "Show Disclaimer",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer Text",
+      "default": "By subscribing, you agree to receive marketing emails from us. You can unsubscribe at any time."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

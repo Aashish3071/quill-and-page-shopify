@@ -1,0 +1,76 @@
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="flex justify-between items-center mb-10">
+      <h2 class="section-heading">{{ section.settings.title }}</h2>
+      <a href="{{ section.settings.view_all_link }}" class="flex items-center gap-2 text-gold hover:text-gold/80 transition-colors">
+        {{ section.settings.view_all_text }}
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.number_of_products %}
+        {% render 'book-card', product: product %}
+      {% else %}
+        {% for i in (1..4) %}
+          <div class="border border-gray-200 rounded-md p-4 text-center">
+            <div class="w-full h-[350px] bg-gray-100 rounded-md"></div>
+            <div class="mt-4">
+              <h3 class="font-serif font-semibold text-lg mb-1">Product Title</h3>
+              <p class="text-gray-600 text-sm mb-2">Author Name</p>
+              <p class="font-medium">$24.99</p>
+            </div>
+          </div>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Books",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Featured Books"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "number_of_products",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "label": "Number of products",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "View All Text",
+      "default": "View All"
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "View All Link",
+      "default": "/collections/all"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Books",
+      "category": "Collections"
+    }
+  ]
+}
+{% endschema %}

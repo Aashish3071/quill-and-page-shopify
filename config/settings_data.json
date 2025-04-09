@@ -1,0 +1,47 @@
+
+{
+  "current": {
+    "color_primary": "#333333",
+    "color_secondary": "#C9B18C",
+    "color_background": "#F5F3EF",
+    "color_text": "#333333",
+    "font_heading": "playfair_display_n7",
+    "font_body": "inter_n4",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "logo": "",
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "company_title": "About Quill & Page",
+          "company_description": "An independent publishing house dedicated to discovering extraordinary voices and bringing beautifully crafted books to discerning readers.",
+          "facebook_link": "",
+          "twitter_link": "",
+          "instagram_link": "",
+          "linkedin_link": "",
+          "navigation_title": "Navigation",
+          "navigation_menu": "footer",
+          "categories_title": "Book Categories",
+          "categories_menu": "categories",
+          "contact_title": "Contact Us",
+          "contact_address": "123 Book Lane, Brooklyn, NY 11201",
+          "contact_phone": "+1 (212) 456-7890",
+          "contact_email": "info@quillandpage.com"
+        }
+      }
+    },
+    "content_for_index": [
+      "hero",
+      "featured-books",
+      "categories",
+      "about-publisher",
+      "blog-preview",
+      "newsletter"
+    ]
+  }
+}

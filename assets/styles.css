@@ -1,0 +1,174 @@
+
+/* Typography */
+.font-serif {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Custom Colors */
+.text-charcoal {
+  color: #333333;
+}
+
+.bg-charcoal {
+  background-color: #333333;
+}
+
+.text-gold {
+  color: #C9B18C;
+}
+
+.bg-gold {
+  background-color: #C9B18C;
+}
+
+.text-cream {
+  color: #F5F3EF;
+}
+
+.bg-cream {
+  background-color: #F5F3EF;
+}
+
+.border-gold {
+  border-color: #C9B18C;
+}
+
+/* Book Cover Effects */
+.book-shadow {
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.375rem;
+  box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.book-cover:hover {
+  box-shadow: 6px 6px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+/* Section Styles */
+.section-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.section-heading::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  width: 4rem;
+  height: 0.125rem;
+  background-color: #C9B18C;
+}
+
+/* Navigation Links */
+.nav-link {
+  position: relative;
+  font-weight: 500;
+  color: #333333;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #C9B18C;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #C9B18C;
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Container for reading content */
+.reading-container {
+  max-width: 65ch;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .reading-container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Prose styling for rich text */
+.prose {
+  line-height: 1.7;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose ul, .prose ol {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose ul {
+  list-style-type: disc;
+}
+
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose a {
+  color: #C9B18C;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  color: #a89270;
+}
+
+/* Active tab styles */
+.tab-trigger.active {
+  color: #333333;
+  border-color: #C9B18C;
+}

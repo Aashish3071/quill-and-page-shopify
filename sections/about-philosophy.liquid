@@ -1,0 +1,87 @@
+
+<section class="py-16 bg-cream">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div>
+        <img 
+          src="{{ section.settings.image | img_url: '800x' }}" 
+          alt="{{ section.settings.title }}" 
+          class="rounded-md shadow-md"
+        >
+      </div>
+      <div>
+        <h2 class="section-heading mb-6">{{ section.settings.title }}</h2>
+        <div class="prose max-w-none text-gray-700">
+          {{ section.settings.content }}
+        </div>
+        
+        <ul class="list-disc pl-5 space-y-2 text-gray-700 mt-6">
+          {% for block in section.blocks %}
+            <li><span class="font-semibold">{{ block.settings.principle_title }}</span> - {{ block.settings.principle_description }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Philosophy",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>At Quill & Page, we believe that books matter—not just as entertainment or information, but as objects of beauty and meaning that can transform lives and shape culture.</p><p>We are guided by three core principles:</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "principle",
+      "name": "Core Principle",
+      "settings": [
+        {
+          "type": "text",
+          "id": "principle_title",
+          "label": "Principle Title",
+          "default": "Literary Excellence"
+        },
+        {
+          "type": "text",
+          "id": "principle_description",
+          "label": "Principle Description",
+          "default": "We seek out writing that is not merely good, but exceptional—work that challenges, moves, and endures."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Philosophy",
+      "blocks": [
+        {
+          "type": "principle"
+        },
+        {
+          "type": "principle"
+        },
+        {
+          "type": "principle"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

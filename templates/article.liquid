@@ -1,0 +1,238 @@
+
+<article>
+  <header class="py-16 bg-cream">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex items-center text-gold text-sm font-medium mb-4">
+          <span>{{ article.tags.first }}</span>
+          <span class="mx-2">•</span>
+          <span>{{ article.published_at | date: "%B %d, %Y" }}</span>
+        </div>
+        <h1 class="font-serif text-4xl md:text-5xl font-bold mb-6">{{ article.title }}</h1>
+        <div class="flex items-center">
+          <div class="mr-3">
+            {% if article.user.image %}
+              <img
+                src="{{ article.user.image | img_url: '48x48', crop: 'center' }}"
+                alt="{{ article.author }}"
+                class="w-12 h-12 rounded-full"
+              >
+            {% else %}
+              <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500">{{ article.author | slice: 0, 1 }}</span>
+              </div>
+            {% endif %}
+          </div>
+          <div>
+            <p class="font-medium">{{ article.author }}</p>
+            <p class="text-sm text-gray-600">{{ article.author.bio | default: "Author" }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="py-12 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl mx-auto">
+        {% if article.image %}
+          <div class="mb-10">
+            <img
+              src="{{ article.image | img_url: '1200x' }}"
+              alt="{{ article.title }}"
+              class="w-full h-auto rounded-md"
+            >
+          </div>
+        {% endif %}
+        
+        <div class="prose max-w-none">
+          {{ article.content }}
+        </div>
+        
+        <div class="mt-10 pt-6 border-t border-gray-200">
+          <div class="flex flex-wrap items-center justify-between">
+            <div class="mb-4 md:mb-0">
+              <p class="font-medium">Tags:</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                {% for tag in article.tags %}
+                  <a href="{{ blog.url }}/tagged/{{ tag | handle }}" class="inline-block px-3 py-1 bg-cream text-charcoal text-sm rounded-md hover:bg-gold hover:text-white transition-colors">
+                    {{ tag }}
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+            <div>
+              <p class="font-medium mb-2">Share:</p>
+              <div class="flex space-x-3">
+                <a href="https://www.facebook.com/sharer.php?u={{ shop.url | append: article.url }}" target="_blank" class="text-gray-500 hover:text-gold transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="https://twitter.com/intent/tweet?text={{ article.title | url_encode }}&url={{ shop.url | append: article.url | url_encode }}" target="_blank" class="text-gray-500 hover:text-gold transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path></svg>
+                </a>
+                <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ shop.url | append: article.url | url_encode }}&title={{ article.title | url_encode }}" target="_blank" class="text-gray-500 hover:text-gold transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect width="4" height="12" x="2" y="9"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </a>
+                <a href="mailto:?subject={{ article.title | url_encode }}&body={{ shop.url | append: article.url | url_encode }}" class="text-gray-500 hover:text-gold transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  {% if blog.comments_enabled? %}
+    <div class="py-12 bg-cream">
+      <div class="container mx-auto px-6">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="font-serif text-2xl font-semibold mb-6">Comments</h2>
+          
+          {% if article.comments_count > 0 %}
+            <div class="space-y-6 mb-12">
+              {% paginate article.comments by 5 %}
+                {% for comment in article.comments %}
+                  <div id="{{ comment.id }}" class="p-6 bg-white rounded-md shadow-sm">
+                    <div class="flex justify-between items-start mb-4">
+                      <div>
+                        <p class="font-medium">{{ comment.author }}</p>
+                        <p class="text-sm text-gray-500">{{ comment.created_at | date: "%B %d, %Y" }}</p>
+                      </div>
+                    </div>
+                    <div class="prose max-w-none">
+                      {{ comment.content }}
+                    </div>
+                  </div>
+                {% endfor %}
+                
+                {% if paginate.pages > 1 %}
+                  <div class="flex justify-center mt-8">
+                    <div class="inline-flex rounded-md shadow-sm gap-2">
+                      {% if paginate.previous.is_link %}
+                        <a href="{{ paginate.previous.url }}" class="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition-colors">
+                          Previous
+                        </a>
+                      {% endif %}
+                      
+                      {% for part in paginate.parts %}
+                        {% if part.is_link %}
+                          <a href="{{ part.url }}" class="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition-colors">
+                            {{ part.title }}
+                          </a>
+                        {% else %}
+                          <span class="px-4 py-2 border border-gold bg-gold text-white rounded-md">
+                            {{ part.title }}
+                          </span>
+                        {% endif %}
+                      {% endfor %}
+                      
+                      {% if paginate.next.is_link %}
+                        <a href="{{ paginate.next.url }}" class="px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50 transition-colors">
+                          Next
+                        </a>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endpaginate %}
+            </div>
+          {% endif %}
+          
+          <div class="bg-white p-6 rounded-md shadow-sm">
+            <h3 class="font-serif text-xl font-semibold mb-4">Leave a Comment</h3>
+            
+            {% form 'new_comment', article %}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label for="comment-author" class="block text-sm font-medium mb-1">Name</label>
+                  <input 
+                    type="text" 
+                    id="comment-author" 
+                    name="comment[author]" 
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                    required
+                  >
+                </div>
+                <div>
+                  <label for="comment-email" class="block text-sm font-medium mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    id="comment-email" 
+                    name="comment[email]" 
+                    class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                    required
+                  >
+                </div>
+              </div>
+              <div class="mb-4">
+                <label for="comment-body" class="block text-sm font-medium mb-1">Comment</label>
+                <textarea 
+                  id="comment-body" 
+                  name="comment[body]" 
+                  rows="4" 
+                  class="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-gold focus:border-transparent"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="bg-charcoal hover:bg-charcoal/90 text-white px-6 py-2 rounded-md transition-colors">
+                Submit Comment
+              </button>
+            {% endform %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="font-serif text-2xl font-semibold mb-8">More Articles</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {% assign related_articles = blog.articles | where: 'id', '!=', article.id | limit: 2 %}
+          {% for related in related_articles %}
+            <a href="{{ related.url }}" class="block">
+              <div class="border-none hover:shadow-md transition-shadow duration-300 h-full flex flex-col rounded-md overflow-hidden">
+                <div class="relative h-48">
+                  {% if related.image %}
+                    <img
+                      src="{{ related.image | img_url: '600x' }}"
+                      alt="{{ related.title }}"
+                      class="w-full h-full object-cover"
+                    >
+                  {% else %}
+                    <div class="w-full h-full bg-gray-100 flex items-center justify-center">
+                      <span class="text-gray-400">No image</span>
+                    </div>
+                  {% endif %}
+                </div>
+                <div class="p-6 flex-1 flex flex-col bg-white">
+                  <div class="flex items-center text-gold text-xs font-medium mb-2">
+                    <span>{{ related.tags.first }}</span>
+                    <span class="mx-2">•</span>
+                    <span>{{ related.published_at | date: "%B %d, %Y" }}</span>
+                  </div>
+                  <h3 class="font-serif text-xl font-semibold mb-2">{{ related.title }}</h3>
+                  <p class="text-gray-600 text-sm">{{ related.excerpt_or_content | strip_html | truncatewords: 15 }}</p>
+                </div>
+              </div>
+            </a>
+          {% else %}
+            <p class="col-span-2 text-center text-gray-500 py-8">No related articles found</p>
+          {% endfor %}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a href="{{ blog.url }}" class="inline-block px-6 py-3 bg-charcoal hover:bg-charcoal/90 text-white font-medium rounded-md transition-colors">
+            Back to Blog
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% section 'newsletter' %}

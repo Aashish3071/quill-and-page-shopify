@@ -1,0 +1,201 @@
+
+<footer class="bg-charcoal text-white py-12">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <div>
+        <h3 class="font-serif text-lg font-semibold mb-4">{{ section.settings.company_title }}</h3>
+        <p class="text-gray-400 text-sm">{{ section.settings.company_description }}</p>
+        <div class="flex space-x-4 mt-4">
+          {% if section.settings.facebook_link != blank %}
+            <a href="{{ section.settings.facebook_link }}" class="text-gray-400 hover:text-gold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-facebook">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.twitter_link != blank %}
+            <a href="{{ section.settings.twitter_link }}" class="text-gray-400 hover:text-gold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-twitter">
+                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.instagram_link != blank %}
+            <a href="{{ section.settings.instagram_link }}" class="text-gray-400 hover:text-gold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-instagram">
+                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+              </svg>
+            </a>
+          {% endif %}
+          {% if section.settings.linkedin_link != blank %}
+            <a href="{{ section.settings.linkedin_link }}" class="text-gray-400 hover:text-gold">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-linkedin">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect width="4" height="12" x="2" y="9"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="font-serif text-lg font-semibold mb-4">{{ section.settings.navigation_title }}</h3>
+        <nav class="flex flex-col space-y-2">
+          {% for link in section.settings.navigation_menu.links %}
+            <a href="{{ link.url }}" class="text-gray-400 hover:text-gold">{{ link.title }}</a>
+          {% endfor %}
+        </nav>
+      </div>
+      
+      <div>
+        <h3 class="font-serif text-lg font-semibold mb-4">{{ section.settings.categories_title }}</h3>
+        <div class="flex flex-col space-y-2">
+          {% for link in section.settings.categories_menu.links %}
+            <a href="{{ link.url }}" class="text-gray-400 hover:text-gold">{{ link.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="font-serif text-lg font-semibold mb-4">{{ section.settings.contact_title }}</h3>
+        <div class="flex flex-col space-y-3 text-gray-400">
+          {% if section.settings.contact_address != blank %}
+            <div class="flex items-start">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin mt-1 mr-2 text-gold">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>{{ section.settings.contact_address }}</span>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.contact_phone != blank %}
+            <div class="flex items-start">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone mt-1 mr-2 text-gold">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              </svg>
+              <span>{{ section.settings.contact_phone }}</span>
+            </div>
+          {% endif %}
+          
+          {% if section.settings.contact_email != blank %}
+            <div class="flex items-start">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail mt-1 mr-2 text-gold">
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+              </svg>
+              <span>{{ section.settings.contact_email }}</span>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-gray-500 text-sm mb-4 md:mb-0">
+        &copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.
+      </p>
+      <div class="flex space-x-4 text-gray-500 text-sm">
+        <a href="/pages/privacy-policy" class="hover:text-gold">Privacy Policy</a>
+        <a href="/pages/terms-of-service" class="hover:text-gold">Terms of Service</a>
+        <a href="/pages/shipping-policy" class="hover:text-gold">Shipping</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "company_title",
+      "label": "Company Title",
+      "default": "About Quill & Page"
+    },
+    {
+      "type": "textarea",
+      "id": "company_description",
+      "label": "Company Description",
+      "default": "An independent publishing house dedicated to discovering extraordinary voices and bringing beautifully crafted books to discerning readers."
+    },
+    {
+      "type": "url",
+      "id": "facebook_link",
+      "label": "Facebook URL"
+    },
+    {
+      "type": "url",
+      "id": "twitter_link",
+      "label": "Twitter URL"
+    },
+    {
+      "type": "url",
+      "id": "instagram_link",
+      "label": "Instagram URL"
+    },
+    {
+      "type": "url",
+      "id": "linkedin_link",
+      "label": "LinkedIn URL"
+    },
+    {
+      "type": "text",
+      "id": "navigation_title",
+      "label": "Navigation Title",
+      "default": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "navigation_menu",
+      "label": "Navigation Menu",
+      "default": "footer"
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Categories Title",
+      "default": "Book Categories"
+    },
+    {
+      "type": "link_list",
+      "id": "categories_menu",
+      "label": "Categories Menu",
+      "default": "categories"
+    },
+    {
+      "type": "text",
+      "id": "contact_title",
+      "label": "Contact Title",
+      "default": "Contact Us"
+    },
+    {
+      "type": "text",
+      "id": "contact_address",
+      "label": "Address",
+      "default": "123 Book Lane, Brooklyn, NY 11201"
+    },
+    {
+      "type": "text",
+      "id": "contact_phone",
+      "label": "Phone",
+      "default": "+1 (212) 456-7890"
+    },
+    {
+      "type": "text",
+      "id": "contact_email",
+      "label": "Email",
+      "default": "info@quillandpage.com"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer"
+    }
+  ]
+}
+{% endschema %}

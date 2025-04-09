@@ -1,0 +1,93 @@
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <h2 class="section-heading text-center mb-12">{{ section.settings.title }}</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {% for block in section.blocks %}
+        <div class="text-center">
+          <div class="relative w-48 h-48 mx-auto mb-4">
+            <div class="absolute inset-0 rounded-full bg-gold opacity-10"></div>
+            {% if block.settings.image != blank %}
+              <img 
+                src="{{ block.settings.image | img_url: '200x200', crop: 'center' }}" 
+                alt="{{ block.settings.name }}" 
+                class="rounded-full w-full h-full object-cover"
+              >
+            {% else %}
+              <div class="rounded-full w-full h-full bg-gray-200 flex items-center justify-center">
+                <span class="text-gray-500">Team Member</span>
+              </div>
+            {% endif %}
+          </div>
+          <h3 class="font-serif text-xl font-semibold mb-1">{{ block.settings.name }}</h3>
+          <p class="text-gold text-sm mb-2">{{ block.settings.position }}</p>
+          <p class="text-gray-600 text-sm">
+            {{ block.settings.bio }}
+          </p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Team Members",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Team"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "team_member",
+      "name": "Team Member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Profile Image"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "Team Member Name"
+        },
+        {
+          "type": "text",
+          "id": "position",
+          "label": "Position",
+          "default": "Job Title"
+        },
+        {
+          "type": "textarea",
+          "id": "bio",
+          "label": "Bio",
+          "default": "Brief description about this team member's background and responsibilities."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Team Members",
+      "blocks": [
+        {
+          "type": "team_member"
+        },
+        {
+          "type": "team_member"
+        },
+        {
+          "type": "team_member"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

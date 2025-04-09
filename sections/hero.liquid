@@ -1,0 +1,110 @@
+
+<section class="relative bg-cream py-16 md:py-24">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div class="order-2 md:order-1">
+        <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+          {{ section.settings.title }}
+        </h1>
+        <p class="text-lg mb-8 text-gray-700 max-w-lg">
+          {{ section.settings.subtitle }}
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="{{ section.settings.button_link }}" class="inline-block px-6 py-3 bg-charcoal hover:bg-charcoal/90 text-white font-medium rounded-md transition-colors text-center">
+            {{ section.settings.button_text }}
+          </a>
+          <a href="{{ section.settings.secondary_button_link }}" class="inline-block px-6 py-3 border border-gold text-gold hover:bg-gold/10 font-medium rounded-md transition-colors text-center">
+            {{ section.settings.secondary_button_text }}
+          </a>
+        </div>
+      </div>
+      <div class="order-1 md:order-2 relative">
+        <div class="relative mx-auto max-w-sm">
+          <div class="absolute -left-8 -top-8 w-56 h-72 bg-gold rounded-md transform rotate-6"></div>
+          <div class="absolute -right-8 -bottom-8 w-56 h-72 bg-charcoal rounded-md transform -rotate-6"></div>
+          <div class="book-cover relative z-10">
+            {% if section.settings.featured_product != blank %}
+              {% assign featured_product = all_products[section.settings.featured_product] %}
+              <img
+                src="{{ featured_product.featured_image | img_url: '600x' }}"
+                alt="{{ featured_product.title }}"
+                class="w-full h-[500px] object-cover rounded-md"
+              >
+            {% else %}
+              {% if section.settings.image != blank %}
+                <img
+                  src="{{ section.settings.image | img_url: '600x' }}"
+                  alt="{{ section.settings.title }}"
+                  class="w-full h-[500px] object-cover rounded-md"
+                >
+              {% else %}
+                <div class="w-full h-[500px] bg-gray-200 rounded-md flex items-center justify-center">
+                  <span class="text-gray-500">Featured Book Image</span>
+                </div>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Discover Stories That Inspire"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subheading",
+      "default": "Curated collections of beautifully crafted books for discerning readers. Explore our latest releases and bestsellers."
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Text",
+      "default": "Browse Collection"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_text",
+      "label": "Secondary Button Text",
+      "default": "About the Publisher"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary Button Link",
+      "default": "/pages/about"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Featured Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Custom Image (if no product selected)"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

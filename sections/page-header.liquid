@@ -1,0 +1,38 @@
+
+<section class="py-16 bg-cream">
+  <div class="container mx-auto px-6">
+    <h1 class="font-serif text-4xl md:text-5xl font-bold mb-6 text-center">{{ page.title }}</h1>
+    {% if section.settings.show_description and page.content != blank %}
+      <div class="max-w-3xl mx-auto">
+        <div class="text-lg text-center text-gray-700 mb-10">
+          {{ section.settings.custom_description | default: page.content | strip_html | truncatewords: 40 }}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Page Header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show Description",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "custom_description",
+      "label": "Custom Description",
+      "info": "If left blank, will use the first few words of page content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page Header"
+    }
+  ]
+}
+{% endschema %}
