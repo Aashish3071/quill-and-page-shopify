@@ -1,0 +1,502 @@
+
+<div class="py-10 bg-cream">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+      <!-- Product Images -->
+      <div class="flex justify-center">
+        <div class="book-cover max-w-md">
+          {% if product.featured_image != blank %}
+            <img 
+              src="{{ product.featured_image | img_url: '800x' }}" 
+              alt="{{ product.title }}" 
+              class="w-full h-auto object-cover rounded-md"
+            >
+          {% else %}
+            <div class="w-full h-[600px] bg-gray-100 rounded-md flex items-center justify-center">
+              <span class="text-gray-400">No image available</span>
+            </div>
+          {% endif %}
+          
+          {% if product.images.size > 1 %}
+            <div class="grid grid-cols-4 gap-2 mt-4">
+              {% for image in product.images limit: section.settings.gallery_limit %}
+                <div class="cursor-pointer book-cover thumbnail{% if forloop.first %} border-2 border-gold{% endif %}">
+                  <img 
+                    src="{{ image | img_url: '100x' }}" 
+                    alt="{{ product.title }}" 
+                    class="w-full h-20 object-cover"
+                    data-full-image="{{ image | img_url: '800x' }}"
+                  >
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Product Info -->
+      <div>
+        <div class="mb-2">
+          {% if product.type != blank %}
+            <a href="/collections/{{ product.type | handle }}" class="text-gold text-sm hover:underline">
+              {{ product.type }}
+            </a>
+          {% endif %}
+        </div>
+        <h1 class="font-serif text-3xl md:text-4xl font-bold mb-2">{{ product.title }}</h1>
+        
+        {% if product.metafields.book.author %}
+          <p class="text-lg mb-4">By <a href="/collections/all/{{ product.metafields.book.author | handle }}" class="text-gold hover:underline">{{ product.metafields.book.author }}</a></p>
+        {% endif %}
+        
+        <!-- Ratings -->
+        <div class="flex items-center space-x-1 mb-6">
+          {% assign rating_value = section.settings.default_rating %}
+          {% for i in (1..5) %}
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="{% if i <= rating_value %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gold">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          {% endfor %}
+          <span class="text-sm text-gray-600 ml-2">
+            {% if section.settings.show_review_count %}
+              ({{ section.settings.review_count }} reviews)
+            {% endif %}
+          </span>
+        </div>
+        
+        <!-- Price and Actions -->
+        <div class="mb-8">
+          <p class="text-2xl font-semibold mb-4">
+            {% if product.compare_at_price > product.price %}
+              <span class="text-red-500">{{ product.price | money }}</span>
+              <span class="text-gray-400 line-through text-lg ml-2">{{ product.compare_at_price | money }}</span>
+            {% else %}
+              {{ product.price | money }}
+            {% endif %}
+          </p>
+          
+          {% form 'product', product, class: 'space-y-4' %}
+            <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            
+            <div class="flex flex-wrap gap-4">
+              <button type="submit" class="bg-charcoal hover:bg-charcoal/90 text-white flex items-center gap-2 px-6 py-3 rounded-md transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                {{ section.settings.add_to_cart_text | default: 'Add to Bag' }}
+              </button>
+              {% if section.settings.show_wishlist_button %}
+                <button type="button" class="border border-gray-300 hover:border-gray-400 px-6 py-3 rounded-md transition-colors flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                  {{ section.settings.wishlist_text | default: 'Add to Wishlist' }}
+                </button>
+              {% endif %}
+              {% if section.settings.show_share_button %}
+                <button type="button" class="border border-gray-300 hover:border-gray-400 px-6 py-3 rounded-md transition-colors flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share-2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+                  {{ section.settings.share_text | default: 'Share' }}
+                </button>
+              {% endif %}
+            </div>
+          {% endform %}
+        </div>
+        
+        <!-- Book Details -->
+        <div class="grid grid-cols-2 gap-4 text-sm">
+          {% if product.metafields.book.isbn %}
+            <div>
+              <p class="text-gray-500">ISBN</p>
+              <p>{{ product.metafields.book.isbn }}</p>
+            </div>
+          {% endif %}
+          
+          {% if product.vendor %}
+            <div>
+              <p class="text-gray-500">Publisher</p>
+              <p>{{ product.vendor }}</p>
+            </div>
+          {% endif %}
+          
+          {% if product.published_at %}
+            <div>
+              <p class="text-gray-500">Publication Date</p>
+              <p>{{ product.published_at | date: "%B %d, %Y" }}</p>
+            </div>
+          {% endif %}
+          
+          {% if product.metafields.book.pages %}
+            <div>
+              <p class="text-gray-500">Pages</p>
+              <p>{{ product.metafields.book.pages }}</p>
+            </div>
+          {% endif %}
+          
+          {% if product.metafields.book.language %}
+            <div>
+              <p class="text-gray-500">Language</p>
+              <p>{{ product.metafields.book.language | default: "English" }}</p>
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- Preview Button -->
+        {% if section.settings.show_preview_button %}
+          <button class="text-gold p-0 mt-6 flex items-center hover:underline">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open mr-2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            {{ section.settings.preview_text | default: 'Preview First Chapter' }}
+          </button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs Section -->
+<div class="py-12 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="border-b border-gray-200 mb-8">
+        <div class="grid w-full grid-cols-3 -mb-px">
+          <button class="tab-trigger active py-4 font-medium text-center border-b-2 border-gold" data-tab="description">{{ section.settings.tab_description | default: 'Description' }}</button>
+          <button class="tab-trigger py-4 font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-charcoal" data-tab="author">{{ section.settings.tab_author | default: 'Author' }}</button>
+          <button class="tab-trigger py-4 font-medium text-center border-b-2 border-transparent text-gray-500 hover:text-charcoal" data-tab="reviews">{{ section.settings.tab_reviews | default: 'Reviews' }}</button>
+        </div>
+      </div>
+      
+      <div id="description" class="tab-content max-w-none">
+        <div class="prose max-w-none text-gray-700 space-y-4">
+          {{ product.description }}
+        </div>
+      </div>
+      
+      <div id="author" class="tab-content hidden max-w-none">
+        <div class="prose max-w-none text-gray-700 space-y-4">
+          {% if product.metafields.book.author_bio %}
+            {{ product.metafields.book.author_bio }}
+          {% else %}
+            <p>{{ section.settings.default_author_bio | default: 'Author information coming soon.' }}</p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <div id="reviews" class="tab-content hidden">
+        <div class="space-y-6">
+          {% if product.metafields.reviews %}
+            {{ product.metafields.reviews }}
+          {% else %}
+            {% for i in (1..section.settings.sample_review_count) %}
+              <div class="p-6 bg-cream rounded-md">
+                <div class="flex items-center mb-2">
+                  <p class="font-semibold">{{ section.settings.sample_reviewer_prefix }} {{ i }}</p>
+                  <div class="mx-3 h-4 w-px bg-gray-300"></div>
+                  <div class="flex">
+                    {% assign random_rating = i | plus: 2 | modulo: 2 | plus: 4 %}
+                    {% for star in (1..5) %}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="{% if star <= random_rating %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gold">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    {% endfor %}
+                  </div>
+                </div>
+                <p class="text-gray-700">{% cycle section.settings.sample_review_1, section.settings.sample_review_2, section.settings.sample_review_3 %}</p>
+              </div>
+            {% endfor %}
+          {% endif %}
+          
+          {% if section.settings.show_review_form %}
+            <div class="mt-8 p-6 bg-cream rounded-md">
+              <h3 class="font-serif text-xl font-semibold mb-4">{{ section.settings.review_form_title | default: 'Write a Review' }}</h3>
+              <form class="space-y-4">
+                <div>
+                  <label for="review-name" class="block text-sm font-medium mb-1">{{ section.settings.review_name_label | default: 'Name' }}</label>
+                  <input type="text" id="review-name" class="w-full border border-gray-300 rounded-md px-4 py-2">
+                </div>
+                <div>
+                  <label for="review-email" class="block text-sm font-medium mb-1">{{ section.settings.review_email_label | default: 'Email' }}</label>
+                  <input type="email" id="review-email" class="w-full border border-gray-300 rounded-md px-4 py-2">
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">{{ section.settings.review_rating_label | default: 'Rating' }}</label>
+                  <div class="flex space-x-1">
+                    {% for i in (1..5) %}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer text-gray-300 hover:text-gold star-rating" data-rating="{{ i }}">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    {% endfor %}
+                  </div>
+                </div>
+                <div>
+                  <label for="review-content" class="block text-sm font-medium mb-1">{{ section.settings.review_content_label | default: 'Review' }}</label>
+                  <textarea id="review-content" rows="4" class="w-full border border-gray-300 rounded-md px-4 py-2"></textarea>
+                </div>
+                <button type="submit" class="bg-charcoal hover:bg-charcoal/90 text-white px-6 py-2 rounded-md transition-colors">{{ section.settings.review_submit_text | default: 'Submit Review' }}</button>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Tab functionality
+    const tabTriggers = document.querySelectorAll('.tab-trigger');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabTriggers.forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        // Remove active class from all triggers
+        tabTriggers.forEach(t => {
+          t.classList.remove('active');
+          t.classList.remove('border-gold');
+          t.classList.add('border-transparent', 'text-gray-500');
+        });
+        
+        // Add active class to clicked trigger
+        trigger.classList.add('active', 'border-gold');
+        trigger.classList.remove('border-transparent', 'text-gray-500');
+        
+        // Hide all tab contents
+        tabContents.forEach(content => {
+          content.classList.add('hidden');
+        });
+        
+        // Show active tab content
+        const tabId = trigger.getAttribute('data-tab');
+        document.getElementById(tabId).classList.remove('hidden');
+      });
+    });
+    
+    // Product image gallery
+    const thumbnails = document.querySelectorAll('.thumbnail');
+    const mainImage = document.querySelector('.book-cover img:first-child');
+    
+    if (thumbnails.length > 0 && mainImage) {
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          const imageUrl = thumb.querySelector('img').getAttribute('data-full-image');
+          mainImage.src = imageUrl;
+          
+          // Update active thumbnail
+          thumbnails.forEach(t => t.classList.remove('border-2', 'border-gold'));
+          thumb.classList.add('border-2', 'border-gold');
+        });
+      });
+    }
+    
+    // Star rating
+    const stars = document.querySelectorAll('.star-rating');
+    let selectedRating = 0;
+    
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = parseInt(star.getAttribute('data-rating'));
+        selectedRating = rating;
+        
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.classList.remove('text-gray-300');
+            s.classList.add('text-gold');
+            s.setAttribute('fill', 'currentColor');
+          } else {
+            s.classList.remove('text-gold');
+            s.classList.add('text-gray-300');
+            s.setAttribute('fill', 'none');
+          }
+        });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Details",
+  "settings": [
+    {
+      "type": "range",
+      "id": "gallery_limit",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "label": "Maximum Gallery Images",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "default_rating",
+      "min": 1,
+      "max": 5,
+      "step": 1,
+      "label": "Default Product Rating",
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_review_count",
+      "label": "Show Review Count",
+      "default": true
+    },
+    {
+      "type": "number",
+      "id": "review_count",
+      "label": "Default Review Count",
+      "default": 12
+    },
+    {
+      "type": "text",
+      "id": "add_to_cart_text",
+      "label": "Add to Cart Button Text",
+      "default": "Add to Bag"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wishlist_button",
+      "label": "Show Wishlist Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "wishlist_text",
+      "label": "Wishlist Button Text",
+      "default": "Add to Wishlist"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_button",
+      "label": "Show Share Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "share_text",
+      "label": "Share Button Text",
+      "default": "Share"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_preview_button",
+      "label": "Show Preview Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "preview_text",
+      "label": "Preview Button Text",
+      "default": "Preview First Chapter"
+    },
+    {
+      "type": "header",
+      "content": "Tabs Settings"
+    },
+    {
+      "type": "text",
+      "id": "tab_description",
+      "label": "Description Tab Label",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "tab_author",
+      "label": "Author Tab Label",
+      "default": "Author"
+    },
+    {
+      "type": "text",
+      "id": "tab_reviews",
+      "label": "Reviews Tab Label",
+      "default": "Reviews"
+    },
+    {
+      "type": "text",
+      "id": "default_author_bio",
+      "label": "Default Author Bio",
+      "default": "Author information coming soon."
+    },
+    {
+      "type": "header",
+      "content": "Reviews Settings"
+    },
+    {
+      "type": "range",
+      "id": "sample_review_count",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Sample Review Count",
+      "default": 3
+    },
+    {
+      "type": "text",
+      "id": "sample_reviewer_prefix",
+      "label": "Sample Reviewer Prefix",
+      "default": "Reviewer"
+    },
+    {
+      "type": "textarea",
+      "id": "sample_review_1",
+      "label": "Sample Review 1",
+      "default": "A brilliant exploration of ideas. The author's knowledge adds authenticity while the characters feel deeply human."
+    },
+    {
+      "type": "textarea",
+      "id": "sample_review_2",
+      "label": "Sample Review 2",
+      "default": "Beautifully written with an intriguing premise. The middle section was riveting and the ending was worth it."
+    },
+    {
+      "type": "textarea",
+      "id": "sample_review_3",
+      "label": "Sample Review 3",
+      "default": "One of the most original books I've read this year. The protagonist's journey felt personal and universal at the same time."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_review_form",
+      "label": "Show Review Form",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "review_form_title",
+      "label": "Review Form Title",
+      "default": "Write a Review"
+    },
+    {
+      "type": "text",
+      "id": "review_name_label",
+      "label": "Name Field Label",
+      "default": "Name"
+    },
+    {
+      "type": "text",
+      "id": "review_email_label",
+      "label": "Email Field Label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "review_rating_label",
+      "label": "Rating Field Label",
+      "default": "Rating"
+    },
+    {
+      "type": "text",
+      "id": "review_content_label",
+      "label": "Review Content Label",
+      "default": "Review"
+    },
+    {
+      "type": "text",
+      "id": "review_submit_text",
+      "label": "Submit Button Text",
+      "default": "Submit Review"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Details"
+    }
+  ]
+}
+{% endschema %}

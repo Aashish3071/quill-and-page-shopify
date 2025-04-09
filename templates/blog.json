@@ -1,0 +1,19 @@
+
+{
+  "sections": {
+    "header": {
+      "type": "page-header"
+    },
+    "main": {
+      "type": "main-blog"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "newsletter"
+  ]
+}

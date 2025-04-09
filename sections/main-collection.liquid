@@ -1,0 +1,183 @@
+
+<div class="py-10 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- Sidebar -->
+      <div class="order-2 md:order-1">
+        <div class="sticky top-24">
+          {% if section.settings.show_categories %}
+            <h3 class="font-serif text-xl font-semibold mb-4">{{ section.settings.categories_title }}</h3>
+            <div class="space-y-2">
+              {% for collection_link in linklists[section.settings.categories_menu].links %}
+                <div class="flex items-center space-x-2">
+                  <input 
+                    type="checkbox" 
+                    id="category-{{ collection_link.title | handle }}" 
+                    class="w-4 h-4 rounded border-gray-300 text-gold focus:ring-gold"
+                    {% if collection_link.url contains collection.handle %}checked{% endif %}
+                  >
+                  <label
+                    for="category-{{ collection_link.title | handle }}"
+                    class="text-sm font-medium leading-none"
+                  >
+                    <a href="{{ collection_link.url }}" class="hover:text-gold">{{ collection_link.title }}</a>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          
+          <div class="my-6 h-px bg-gray-200"></div>
+          
+          {% if section.settings.show_price_filter %}
+            <h3 class="font-serif text-xl font-semibold mb-4">{{ section.settings.price_filter_title }}</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <input type="number" placeholder="{{ section.settings.min_price_placeholder }}" class="border border-gray-300 rounded-md px-4 py-2 w-full">
+              <input type="number" placeholder="{{ section.settings.max_price_placeholder }}" class="border border-gray-300 rounded-md px-4 py-2 w-full">
+            </div>
+            <button class="w-full mt-4 bg-charcoal hover:bg-charcoal/90 text-white px-4 py-2 rounded-md transition-colors">
+              {{ section.settings.apply_filter_text }}
+            </button>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- Book Grid -->
+      <div class="order-1 md:order-2 md:col-span-3">
+        {% if collection.products.size > 0 %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for product in collection.products %}
+              {% render 'book-card', product: product %}
+            {% endfor %}
+          </div>
+          
+          {% if paginate.pages > 1 %}
+            <div class="flex justify-center space-x-2 mt-12">
+              {% if paginate.previous %}
+                <a href="{{ paginate.previous.url }}" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                  {{ section.settings.pagination_prev_text }}
+                </a>
+              {% endif %}
+              
+              {% for part in paginate.parts %}
+                {% if part.is_link %}
+                  <a href="{{ part.url }}" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                    {{ part.title }}
+                  </a>
+                {% else %}
+                  <span class="px-4 py-2 border border-gold bg-gold text-white rounded-md">
+                    {{ part.title }}
+                  </span>
+                {% endif %}
+              {% endfor %}
+              
+              {% if paginate.next %}
+                <a href="{{ paginate.next.url }}" class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                  {{ section.settings.pagination_next_text }}
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+        {% else %}
+          <div class="text-center py-10">
+            <h3 class="font-serif text-xl font-semibold mb-2">{{ section.settings.no_products_title }}</h3>
+            <p class="text-gray-600">{{ section.settings.no_products_text }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Products",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_categories",
+      "label": "Show Categories Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "categories_title",
+      "label": "Categories Title",
+      "default": "Categories"
+    },
+    {
+      "type": "link_list",
+      "id": "categories_menu",
+      "label": "Categories Menu",
+      "default": "categories"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_price_filter",
+      "label": "Show Price Filter",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "price_filter_title",
+      "label": "Price Filter Title",
+      "default": "Price Range"
+    },
+    {
+      "type": "text",
+      "id": "min_price_placeholder",
+      "label": "Min Price Placeholder",
+      "default": "Min"
+    },
+    {
+      "type": "text",
+      "id": "max_price_placeholder",
+      "label": "Max Price Placeholder",
+      "default": "Max"
+    },
+    {
+      "type": "text",
+      "id": "apply_filter_text",
+      "label": "Apply Filter Button Text",
+      "default": "Apply"
+    },
+    {
+      "type": "header",
+      "content": "Pagination Settings"
+    },
+    {
+      "type": "text",
+      "id": "pagination_prev_text",
+      "label": "Previous Page Text",
+      "default": "Previous"
+    },
+    {
+      "type": "text",
+      "id": "pagination_next_text",
+      "label": "Next Page Text",
+      "default": "Next"
+    },
+    {
+      "type": "header",
+      "content": "Empty State"
+    },
+    {
+      "type": "text",
+      "id": "no_products_title",
+      "label": "No Products Title",
+      "default": "No Books Found"
+    },
+    {
+      "type": "text",
+      "id": "no_products_text",
+      "label": "No Products Text",
+      "default": "Try adjusting your search or filter criteria"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Products"
+    }
+  ]
+}
+{% endschema %}

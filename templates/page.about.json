@@ -1,0 +1,31 @@
+
+{
+  "sections": {
+    "header": {
+      "type": "page-header"
+    },
+    "beginning": {
+      "type": "about-beginning"
+    },
+    "philosophy": {
+      "type": "about-philosophy"
+    },
+    "team": {
+      "type": "team-members"
+    },
+    "cta": {
+      "type": "cta-banner"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "header",
+    "beginning",
+    "philosophy",
+    "team",
+    "cta",
+    "newsletter"
+  ]
+}

@@ -1,0 +1,64 @@
+
+<div class="py-16 bg-cream">
+  <div class="container mx-auto px-6">
+    <h2 class="section-heading mb-10">{{ section.settings.title }}</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      {% if section.settings.collection != blank %}
+        {% assign related_collection = collections[section.settings.collection] %}
+        {% for related_product in related_collection.products limit: section.settings.products_limit %}
+          {% render 'book-card', product: related_product %}
+        {% else %}
+          <p class="col-span-4 text-center text-gray-500 py-8">{{ section.settings.no_products_text }}</p>
+        {% endfor %}
+      {% else %}
+        {% assign related_products = product.collections.first.products | where: "id", "!=" | product.id | limit: section.settings.products_limit %}
+        {% for related_product in related_products %}
+          {% render 'book-card', product: related_product %}
+        {% else %}
+          <p class="col-span-4 text-center text-gray-500 py-8">{{ section.settings.no_products_text }}</p>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Related Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "You May Also Like"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Custom Collection",
+      "info": "If left blank, will show products from the current product's first collection"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Maximum Products",
+      "default": 4
+    },
+    {
+      "type": "text",
+      "id": "no_products_text",
+      "label": "No Products Text",
+      "default": "No related products found"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Related Products"
+    }
+  ]
+}
+{% endschema %}

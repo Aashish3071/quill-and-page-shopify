@@ -39,7 +39,7 @@
                 >
               {% else %}
                 <div class="w-full h-[500px] bg-gray-200 rounded-md flex items-center justify-center">
-                  <span class="text-gray-500">Featured Book Image</span>
+                  <span class="text-gray-500">{{ section.settings.image_placeholder_text }}</span>
                 </div>
               {% endif %}
             {% endif %}
@@ -99,6 +99,12 @@
       "type": "image_picker",
       "id": "image",
       "label": "Custom Image (if no product selected)"
+    },
+    {
+      "type": "text",
+      "id": "image_placeholder_text",
+      "label": "Image Placeholder Text",
+      "default": "Featured Book Image"
     }
   ],
   "presets": [

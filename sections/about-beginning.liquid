@@ -1,0 +1,62 @@
+
+<section class="py-16 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div>
+        <h2 class="section-heading mb-6">{{ section.settings.title }}</h2>
+        <div class="prose max-w-none text-gray-700">
+          {{ section.settings.content }}
+        </div>
+      </div>
+      <div class="order-first md:order-last">
+        {% if section.settings.image != blank %}
+          <img 
+            src="{{ section.settings.image | img_url: '800x' }}" 
+            alt="{{ section.settings.title }}" 
+            class="rounded-md shadow-md"
+          >
+        {% else %}
+          <div class="w-full h-[400px] bg-gray-200 rounded-md flex items-center justify-center">
+            <span class="text-gray-500">{{ section.settings.image_placeholder_text }}</span>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About Beginning",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Title",
+      "default": "Our Beginning"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<p>Quill & Page was founded in 2010 by a group of literary enthusiasts who shared a passion for beautiful books and powerful stories. What began as a small independent press in a tiny office has grown into a respected publishing house known for its commitment to literary excellence and artistic innovation.</p><p>Our founders believed that despite the digital revolution, physical books still matter—not just as vessels for information, but as objects of beauty and meaning that can transform lives.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "text",
+      "id": "image_placeholder_text",
+      "label": "Image Placeholder Text",
+      "default": "About Beginning Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Beginning"
+    }
+  ]
+}
+{% endschema %}

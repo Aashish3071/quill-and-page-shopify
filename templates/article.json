@@ -1,0 +1,19 @@
+
+{
+  "sections": {
+    "main": {
+      "type": "main-article"
+    },
+    "related": {
+      "type": "related-articles"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "main",
+    "related",
+    "newsletter"
+  ]
+}

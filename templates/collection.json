@@ -1,0 +1,19 @@
+
+{
+  "sections": {
+    "header": {
+      "type": "collection-header"
+    },
+    "main": {
+      "type": "main-collection"
+    },
+    "newsletter": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "header",
+    "main",
+    "newsletter"
+  ]
+}
