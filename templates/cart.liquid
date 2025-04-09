@@ -1,35 +1,37 @@
 {% layout 'theme' %}
 
-<main class="cart-page">
+<main class="cart-page container">
   <h1>Your Cart</h1>
 
   {% if cart.item_count > 0 %}
     {% for item in cart.items %}
-      <div class="cart-item">
+      <div class="cart-item" style="border-bottom: 1px solid #eee; padding: 20px 0;">
         {% if item.image %}
-          <img src="{{ item.image | img_url: 'small' }}" alt="{{ item.product.title }}">
+          <img src="{{ item.image | img_url: 'small' }}" alt="{{ item.product.title }}" width="100">
         {% else %}
-          <p>No image available</p>
+          <div style="width: 100px; height: 100px; background: #f3f3f3; display: flex; align-items: center; justify-content: center;">
+            <span>No image</span>
+          </div>
         {% endif %}
 
-        <div class="cart-info">
+        <div class="cart-info" style="margin-left: 20px;">
           <h3>{{ item.product.title }}</h3>
 
-          {% if item.variant.title != 'Default Title' %}
+          {% unless item.variant.title == 'Default Title' %}
             <p>Variant: {{ item.variant.title }}</p>
-          {% endif %}
+          {% endunless %}
 
           <p>Quantity: {{ item.quantity }}</p>
           <p>Price: {{ item.line_price | money }}</p>
 
-          <a href="/cart/change?line={{ forloop.index }}&quantity=0">Remove</a>
+          <a href="/cart/change?line={{ forloop.index }}&quantity=0" style="color: red;">Remove</a>
         </div>
       </div>
     {% endfor %}
 
-    <div class="cart-summary">
+    <div class="cart-summary" style="margin-top: 30px;">
       <p><strong>Total:</strong> {{ cart.total_price | money }}</p>
-      <a href="/checkout" class="btn">Proceed to Checkout</a>
+      <a href="/checkout" class="btn" style="background: black; color: white; padding: 10px 20px; display: inline-block; text-decoration: none;">Proceed to Checkout</a>
     </div>
   {% else %}
     <p>Your cart is empty.</p>
