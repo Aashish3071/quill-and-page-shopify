@@ -1,81 +1,22 @@
-
-<div class="bg-cream">
-  <div class="container mx-auto px-6">
-    <header class="flex justify-between items-center py-4">
-      <a href="/" class="flex items-center">
-        {% if section.settings.logo != blank %}
-          <img src="{{ section.settings.logo | img_url: '200x' }}" alt="{{ shop.name }}" class="h-10 w-auto">
-        {% else %}
-          <h1 class="font-serif font-bold text-2xl text-charcoal">{{ shop.name }}</h1>
-        {% endif %}
+<header class="site-header">
+  <div class="container">
+    {% if section.settings.logo %}
+      <a href="/" class="logo">
+        <img src="{{ section.settings.logo | image_url: width: 200 }}" alt="Site Logo">
       </a>
-      
-      <nav class="hidden md:flex items-center space-x-8">
-        {% for link in section.settings.menu.links %}
-          <a href="{{ link.url }}" class="nav-link">{{ link.title }}</a>
-        {% endfor %}
-      </nav>
-      
-      <div class="flex items-center space-x-4">
-        <a href="/search" class="text-charcoal hover:text-gold" aria-label="Search">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search">
-            <circle cx="11" cy="11" r="8"></circle>
-            <path d="m21 21-4.3-4.3"></path>
-          </svg>
-        </a>
-        <a href="/account" class="text-charcoal hover:text-gold" aria-label="Account">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user">
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
-        </a>
-        <a href="/cart" class="text-charcoal hover:text-gold relative" aria-label="Cart">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag">
-            <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-            <path d="M3 6h18"></path>
-            <path d="M16 10a4 4 0 0 1-8 0"></path>
-          </svg>
-          {% if cart.item_count > 0 %}
-            <span class="absolute -top-2 -right-2 bg-gold text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              {{ cart.item_count }}
-            </span>
-          {% endif %}
-        </a>
-        <button id="mobile-menu-toggle" class="md:hidden text-charcoal hover:text-gold" aria-label="Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu">
-            <line x1="4" x2="20" y1="12" y2="12"></line>
-            <line x1="4" x2="20" y1="6" y2="6"></line>
-            <line x1="4" x2="20" y1="18" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-    </header>
-  </div>
-  
-  <!-- Mobile Menu -->
-  <div id="mobile-menu" class="hidden md:hidden">
-    <div class="container mx-auto px-6 py-4 bg-white shadow-md">
-      <nav class="flex flex-col space-y-4">
-        {% for link in section.settings.menu.links %}
-          <a href="{{ link.url }}" class="text-charcoal hover:text-gold py-2">{{ link.title }}</a>
-        {% endfor %}
-      </nav>
-    </div>
-  </div>
-</div>
+    {% else %}
+      <h1><a href="/">Store Name</a></h1>
+    {% endif %}
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const menuToggle = document.getElementById('mobile-menu-toggle');
-    const mobileMenu = document.getElementById('mobile-menu');
-    
-    if (menuToggle && mobileMenu) {
-      menuToggle.addEventListener('click', function() {
-        mobileMenu.classList.toggle('hidden');
-      });
-    }
-  });
-</script>
+    <nav class="main-menu">
+      <ul>
+        {% for link in section.settings.menu.links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>
 
 {% schema %}
 {
@@ -89,19 +30,15 @@
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Menu",
+      "label": "Main Menu",
       "default": "main-menu"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_cart_count",
-      "label": "Show Cart Count",
-      "default": true
     }
   ],
+  "max_blocks": 0,
   "presets": [
     {
-      "name": "Header"
+      "name": "Header",
+      "category": "Header"
     }
   ]
 }
