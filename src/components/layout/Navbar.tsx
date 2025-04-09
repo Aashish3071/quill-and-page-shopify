@@ -1,11 +1,12 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X, Search, ShoppingBag } from 'lucide-react';
+import { Menu, X, Search, ShoppingBag, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const cartCount = 0; // In a real app, this would come from your cart state or context
   
   return (
     <header className="bg-cream py-4 px-6 md:px-10 sticky top-0 z-50 shadow-sm">
@@ -18,6 +19,37 @@ const Navbar = () => {
             </h1>
           </Link>
           
+          {/* Mobile Icons and Menu Button */}
+          <div className="flex items-center space-x-3 md:hidden">
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/search">
+                <Search className="h-5 w-5 text-charcoal" />
+              </Link>
+            </Button>
+            <Button variant="ghost" size="icon" asChild className="relative">
+              <Link to="/cart">
+                <ShoppingBag className="h-5 w-5 text-charcoal" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 h-5 w-5 text-xs bg-gold text-white rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="ml-1"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6 text-charcoal" />
+              ) : (
+                <Menu className="h-6 w-6 text-charcoal" />
+              )}
+            </Button>
+          </div>
+          
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link to="/" className="nav-link">Home</Link>
@@ -27,31 +59,27 @@ const Navbar = () => {
             <Link to="/contact" className="nav-link">Contact</Link>
           </div>
           
-          {/* Icons */}
+          {/* Desktop Icons */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
-              <Search className="h-5 w-5" />
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/search">
+                <Search className="h-5 w-5 text-charcoal" />
+              </Link>
             </Button>
-            <Button variant="ghost" size="icon">
-              <ShoppingBag className="h-5 w-5" />
-              <span className="absolute top-0 right-0 h-4 w-4 text-xs bg-gold text-white rounded-full flex items-center justify-center">
-                0
-              </span>
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/account">
+                <User className="h-5 w-5 text-charcoal" />
+              </Link>
             </Button>
-          </div>
-          
-          {/* Mobile Menu Button */}
-          <div className="flex md:hidden">
-            <Button 
-              variant="ghost" 
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+            <Button variant="ghost" size="icon" asChild className="relative">
+              <Link to="/cart">
+                <ShoppingBag className="h-5 w-5 text-charcoal" />
+                {cartCount > 0 && (
+                  <span className="absolute -top-2 -right-2 h-5 w-5 text-xs bg-gold text-white rounded-full flex items-center justify-center">
+                    {cartCount}
+                  </span>
+                )}
+              </Link>
             </Button>
           </div>
         </nav>
@@ -96,17 +124,6 @@ const Navbar = () => {
             >
               Contact
             </Link>
-            <div className="flex space-x-4 py-2">
-              <Button variant="ghost" size="icon">
-                <Search className="h-5 w-5" />
-              </Button>
-              <Button variant="ghost" size="icon">
-                <ShoppingBag className="h-5 w-5" />
-                <span className="absolute top-0 right-0 h-4 w-4 text-xs bg-gold text-white rounded-full flex items-center justify-center">
-                  0
-                </span>
-              </Button>
-            </div>
           </div>
         </div>
       )}
