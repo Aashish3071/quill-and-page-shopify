@@ -1,201 +1,33 @@
+<section class="main-product container">
+  <div class="product-details">
+    {% if product.featured_image %}
+      <img src="{{ product.featured_image | img_url: 'large' }}" alt="{{ product.title }}">
+    {% else %}
+      <div style="width: 300px; height: 300px; background: #f3f3f3; display: flex; align-items: center; justify-content: center;">
+        <span>No image available</span>
+      </div>
+    {% endif %}
 
-<div class="container mx-auto px-6 py-16">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-    <!-- Product Images -->
-    <div class="relative">
-      <div class="book-cover">
-        <img 
-          src="{{ product.featured_image | img_url: '800x' }}" 
-          alt="{{ product.title }}" 
-          class="w-full rounded-md object-cover"
-        >
-      </div>
-      
-      {% if product.images.size > 1 %}
-        <div class="mt-4 flex flex-wrap gap-2">
-          {% for image in product.images %}
-            <div class="cursor-pointer w-20 h-20 rounded-md overflow-hidden {% if forloop.first %}ring-2 ring-gold{% endif %}">
-              <img 
-                src="{{ image | img_url: '200x' }}" 
-                alt="{{ product.title }}" 
-                class="w-full h-full object-cover"
-              >
-            </div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-    
-    <!-- Product Info -->
-    <div>
-      <h1 class="font-serif text-4xl font-bold mb-2">{{ product.title }}</h1>
-      
-      <div class="mb-6 flex items-center">
-        <span class="text-2xl font-bold text-charcoal">{{ product.price | money }}</span>
-        {% if product.compare_at_price > product.price %}
-          <span class="ml-3 text-lg line-through text-gray-500">{{ product.compare_at_price | money }}</span>
-          <span class="ml-3 bg-gold text-white px-2 py-1 text-xs font-bold rounded">
-            {{ product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round }}% OFF
-          </span>
-        {% endif %}
-      </div>
-      
-      {% if product.available %}
-        <span class="text-green-600 font-medium mb-6 block">In Stock</span>
-      {% else %}
-        <span class="text-red-600 font-medium mb-6 block">Out of Stock</span>
-      {% endif %}
-      
-      <div class="prose prose-lg mb-8">
-        {{ product.description }}
-      </div>
-      
-      <!-- Product Form -->
-      <form method="post" action="/cart/add" id="product-form" class="mb-8">
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-        
-        {% if product.available %}
-          <div class="flex flex-col sm:flex-row gap-4">
-            <div class="flex">
-              <button 
-                type="button" 
-                class="bg-gray-200 px-4 py-2 rounded-l-md" 
-                onclick="decrementQuantity()"
-              >-</button>
-              <input 
-                type="number" 
-                name="quantity" 
-                value="1" 
-                min="1" 
-                id="quantity" 
-                class="w-16 text-center border-y border-gray-200"
-              >
-              <button 
-                type="button" 
-                class="bg-gray-200 px-4 py-2 rounded-r-md" 
-                onclick="incrementQuantity()"
-              >+</button>
-            </div>
-            <button 
-              type="submit" 
-              class="flex-1 bg-charcoal text-white py-3 px-6 rounded-md hover:bg-charcoal/90 transition-colors"
-              {% unless product.available %}disabled{% endunless %}
-            >Add to Cart</button>
-          </div>
+    <div class="product-content">
+      <h1>{{ product.title }}</h1>
+      <p>{{ product.description }}</p>
+
+      <form method="post" action="/cart/add">
+        {% if product.variants.size > 1 %}
+          <label for="variant-selector">Choose an option:</label>
+          <select id="variant-selector" name="id">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}">
+                {{ variant.title }} - {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
         {% else %}
-          <button 
-            disabled 
-            class="w-full bg-gray-300 text-gray-500 py-3 px-6 rounded-md cursor-not-allowed"
-          >Out of Stock</button>
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
         {% endif %}
+
+        <button type="submit" class="btn">Add to Cart</button>
       </form>
-      
-      <!-- Product Meta Info -->
-      <div class="border-t border-gray-200 pt-6">
-        <div class="flex items-center mb-2">
-          <span class="font-medium w-24">Author:</span>
-          <span>{{ product.vendor }}</span>
-        </div>
-        
-        {% if product.type != blank %}
-          <div class="flex items-center mb-2">
-            <span class="font-medium w-24">Category:</span>
-            <span>{{ product.type }}</span>
-          </div>
-        {% endif %}
-        
-        {% if product.tags.size > 0 %}
-          <div class="flex items-center">
-            <span class="font-medium w-24">Tags:</span>
-            <div class="flex flex-wrap gap-1">
-              {% for tag in product.tags %}
-                <a href="{{ tag | link_to_tag: tag }}" class="text-gold hover:underline">{{ tag }}{% unless forloop.last %}, {% endunless %}</a>
-              {% endfor %}
-            </div>
-          </div>
-        {% endif %}
-      </div>
     </div>
   </div>
-</div>
-
-<script>
-  function incrementQuantity() {
-    const quantityInput = document.getElementById('quantity');
-    const currentValue = parseInt(quantityInput.value);
-    quantityInput.value = currentValue + 1;
-  }
-  
-  function decrementQuantity() {
-    const quantityInput = document.getElementById('quantity');
-    const currentValue = parseInt(quantityInput.value);
-    if (currentValue > 1) {
-      quantityInput.value = currentValue - 1;
-    }
-  }
-  
-  // Add to cart Ajax (optional improvement)
-  document.addEventListener('DOMContentLoaded', function() {
-    const productForm = document.getElementById('product-form');
-    
-    if (productForm) {
-      productForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        
-        const formData = new FormData(productForm);
-        
-        fetch('/cart/add.js', {
-          method: 'POST',
-          body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Refresh the cart count
-          fetch('/cart.js')
-            .then(response => response.json())
-            .then(cart => {
-              const cartCountElements = document.querySelectorAll('.cart-count');
-              cartCountElements.forEach(element => {
-                element.textContent = cart.item_count;
-                element.classList.remove('hidden');
-              });
-            });
-            
-          // Show success message
-          alert('Item added to cart!');
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('There was an error adding this item to your cart. Please try again.');
-        });
-      });
-    }
-  });
-</script>
-
-{% schema %}
-{
-  "name": "Product Page",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "show_quantity_selector",
-      "label": "Show quantity selector",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "label": "Show author/vendor",
-      "default": true
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_ajax_add_to_cart",
-      "label": "Enable AJAX add to cart",
-      "default": true,
-      "info": "Updates the cart without page refresh"
-    }
-  ]
-}
-{% endschema %}
+</section>
