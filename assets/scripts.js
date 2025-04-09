@@ -118,4 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
+  // Force scroll to top on page load
+window.scrollTo(0, 0);
+window.addEventListener('pageshow', () => {
+  window.scrollTo(0, 0);
 });
